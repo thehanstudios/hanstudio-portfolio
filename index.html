@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HANSTUDIO - Graphic Design Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        :root {
+            --sage: #7a8b7a;
+            --olive: #5a6b4f;
+            --cream: #f5f3ed;
+            --charcoal: #2d2d2d;
+            --light-sage: #9fad9f;
+            --dark-olive: #4a5741;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            overflow-x: hidden;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(245, 243, 237, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--sage);
+        }
+
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            color: var(--dark-olive);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            letter-spacing: 0.4em;
+            color: var(--olive);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: var(--charcoal);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--sage);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--olive);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--olive);
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 3rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 300;
+            color: var(--dark-olive);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            color: var(--sage);
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: var(--olive);
+            color: var(--cream);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 0.4s backwards;
+        }
+
+        .cta-button:hover {
+            background: var(--dark-olive);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(90, 107, 79, 0.3);
+        }
+
+        .hero-decoration {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--light-sage) 0%, transparent 70%);
+            opacity: 0.2;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .decoration-1 {
+            top: -100px;
+            right: -100px;
+        }
+
+        .decoration-2 {
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            min-height: 100vh;
+            padding: 8rem 3rem 5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            color: var(--dark-olive);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--sage);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--sage);
+            margin-bottom: 4rem;
+            letter-spacing: 0.05em;
+        }
+
+        .portfolio-filters {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 2rem;
+            background: transparent;
+            border: 1px solid var(--sage);
+            color: var(--charcoal);
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--olive);
+            color: var(--cream);
+            border-color: var(--olive);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .portfolio-item {
+            position: relative;
+            aspect-ratio: 4/5;
+            background: linear-gradient(135deg, var(--light-sage) 0%, var(--sage) 100%);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .portfolio-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--charcoal);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .portfolio-item:hover::before {
+            opacity: 0.7;
+        }
+
+        .portfolio-item-content {
+            position: absolute;
+            inset: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            z-index: 2;
+            color: var(--cream);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-item:hover .portfolio-item-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .portfolio-item-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-item-category {
+            font-size: 0.85rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+        }
+
+        .portfolio-number {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            color: rgba(245, 243, 237, 0.3);
+            z-index: 0;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            margin-bottom: 4rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--charcoal);
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-box {
+            background: var(--olive);
+            padding: 3rem;
+            color: var(--cream);
+        }
+
+        .mission-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+
+        .cv-content {
+            max-width: 900px;
+        }
+
+        .cv-section {
+            margin-bottom: 4rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(122, 139, 122, 0.3);
+        }
+
+        .cv-section:last-child {
+            border-bottom: none;
+        }
+
+        .cv-section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: var(--olive);
+            margin-bottom: 2rem;
+        }
+
+        .cv-item {
+            margin-bottom: 2rem;
+        }
+
+        .cv-item-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .cv-item-details {
+            font-size: 0.95rem;
+            color: var(--sage);
+            margin-bottom: 0.5rem;
+        }
+
+        .cv-item-description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--charcoal);
+        }
+
+        .download-btn {
+            padding: 1rem 2.5rem;
+            background: var(--sage);
+            color: var(--cream);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .download-btn:hover {
+            background: var(--olive);
+            transform: translateX(5px);
+        }
+
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: var(--charcoal);
+            margin-bottom: 4rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .contact-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            transform: translateY(-5px);
+            color: var(--olive);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--olive);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cream);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover .contact-icon {
+            background: var(--dark-olive);
+            transform: rotate(10deg);
+        }
+
+        .contact-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        .footer {
+            padding: 3rem;
+            text-align: center;
+            background: var(--charcoal);
+            color: var(--cream);
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+                font-size: 0.8rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .hero {
+                padding: 5rem 1.5rem 2rem;
+            }
+
+            .section {
+                padding: 5rem 1.5rem 3rem;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .contact-links {
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const portfolioItems = [
+            { id: 1, title: 'Urban Identity System', category: 'branding', number: '01' },
+            { id: 2, title: 'Abstract Composition', category: 'digital', number: '02' },
+            { id: 3, title: 'Botanical Series I', category: 'paintings', number: '03' },
+            { id: 4, title: 'Tech Startup Branding', category: 'branding', number: '04' },
+            { id: 5, title: 'Geometric Exploration', category: 'digital', number: '05' },
+            { id: 6, title: 'Landscape in Olive', category: 'paintings', number: '06' },
+            { id: 7, title: 'Café Visual Identity', category: 'branding', number: '07' },
+            { id: 8, title: 'Digital Dreamscape', category: 'digital', number: '08' },
+            { id: 9, title: 'Still Life Studies', category: 'paintings', number: '09' },
+            { id: 10, title: 'Fashion Label Design', category: 'branding', number: '10' },
+            { id: 11, title: 'Parametric Forms', category: 'digital', number: '11' },
+            { id: 12, title: 'Abstract Portrait', category: 'paintings', number: '12' }
+        ];
+
+        function App() {
+            const [activeSection, setActiveSection] = useState('home');
+            const [activeFilter, setActiveFilter] = useState('all');
+
+            const scrollToSection = (section) => {
+                setActiveSection(section);
+                const element = document.getElementById(section);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+
+            const filteredItems = activeFilter === 'all' 
+                ? portfolioItems 
+                : portfolioItems.filter(item => item.category === activeFilter);
+
+            return (
+                <>
+                    <header className="header">
+                        <nav className="nav">
+                            <div className="logo" onClick={() => scrollToSection('home')}>
+                                HANSTUDIO
+                            </div>
+                            <ul className="nav-links">
+                                <li className={`nav-link ${activeSection === 'portfolio' ? 'active' : ''}`} 
+                                    onClick={() => scrollToSection('portfolio')}>
+                                    Portfolio
+                                </li>
+                                <li className={`nav-link ${activeSection === 'about' ? 'active' : ''}`} 
+                                    onClick={() => scrollToSection('about')}>
+                                    Artist Statement
+                                </li>
+                                <li className={`nav-link ${activeSection === 'cv' ? 'active' : ''}`} 
+                                    onClick={() => scrollToSection('cv')}>
+                                    CV
+                                </li>
+                                <li className={`nav-link ${activeSection === 'contact' ? 'active' : ''}`} 
+                                    onClick={() => scrollToSection('contact')}>
+                                    Contact
+                                </li>
+                            </ul>
+                        </nav>
+                    </header>
+
+                    <section id="home" className="hero">
+                        <div className="hero-decoration decoration-1"></div>
+                        <div className="hero-decoration decoration-2"></div>
+                        <div className="hero-content">
+                            <h1 className="hero-title">HANSTUDIO</h1>
+                            <p className="hero-subtitle">GRAPHIC DESIGN & VISUAL ARTS</p>
+                            <button className="cta-button" onClick={() => scrollToSection('portfolio')}>
+                                VIEW WORK
+                            </button>
+                        </div>
+                    </section>
+
+                    <section id="portfolio" className="section">
+                        <div className="container">
+                            <h2 className="section-title">Portfolio</h2>
+                            <p className="section-subtitle">A curated selection of design work</p>
+                            
+                            <div className="portfolio-filters">
+                                <button 
+                                    className={`filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
+                                    onClick={() => setActiveFilter('all')}
+                                >
+                                    All Work
+                                </button>
+                                <button 
+                                    className={`filter-btn ${activeFilter === 'digital' ? 'active' : ''}`}
+                                    onClick={() => setActiveFilter('digital')}
+                                >
+                                    Digital Art
+                                </button>
+                                <button 
+                                    className={`filter-btn ${activeFilter === 'branding' ? 'active' : ''}`}
+                                    onClick={() => setActiveFilter('branding')}
+                                >
+                                    Branding
+                                </button>
+                                <button 
+                                    className={`filter-btn ${activeFilter === 'paintings' ? 'active' : ''}`}
+                                    onClick={() => setActiveFilter('paintings')}
+                                >
+                                    Paintings
+                                </button>
+                            </div>
+
+                            <div className="portfolio-grid">
+                                {filteredItems.map(item => (
+                                    <div key={item.id} className="portfolio-item">
+                                        <div className="portfolio-number">{item.number}</div>
+                                        <div className="portfolio-item-content">
+                                            <h3 className="portfolio-item-title">{item.title}</h3>
+                                            <p className="portfolio-item-category">
+                                                {item.category.toUpperCase()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="about" className="section">
+                        <div className="container">
+                            <h2 className="section-title">Artist Statement</h2>
+                            <p className="section-subtitle">Philosophy & approach</p>
+                            
+                            <div className="about-content">
+                                <div className="about-text">
+                                    <h3 className="mission-title" style={{color: 'var(--olive)', marginBottom: '2rem'}}>
+                                        About Me
+                                    </h3>
+                                    <p>
+                                        I am a multidisciplinary graphic designer with a passion for creating 
+                                        visual narratives that bridge the gap between traditional art and 
+                                        contemporary digital expression. My work explores the intersection of 
+                                        organic forms and geometric precision.
+                                    </p>
+                                    <p>
+                                        With over a decade of experience in branding, digital art, and fine art, 
+                                        I approach each project as an opportunity to tell a unique story through 
+                                        carefully crafted visual language.
+                                    </p>
+                                    <p>
+                                        My practice is informed by a deep appreciation for nature, minimalist 
+                                        aesthetics, and the power of thoughtful composition to evoke emotion 
+                                        and create lasting impressions.
+                                    </p>
+                                </div>
+
+                                <div className="mission-box">
+                                    <h3 className="mission-title">Mission & Values</h3>
+                                    <p className="mission-text">
+                                        I believe design should be intentional, sustainable, and meaningful. 
+                                        Every project begins with deep listening and understanding—not just of 
+                                        the client's needs, but of the broader context in which the work will live.
+                                    </p>
+                                    <p className="mission-text" style={{marginTop: '1.5rem'}}>
+                                        My commitment is to create work that stands the test of time, challenges 
+                                        conventions, and elevates the everyday through thoughtful design that 
+                                        respects both craft and audience.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="cv" className="section">
+                        <div className="container">
+                            <h2 className="section-title">Curriculum Vitae</h2>
+                            <p className="section-subtitle">Experience & achievements</p>
+                            
+                            <div className="cv-content">
+                                <div className="cv-section">
+                                    <h3 className="cv-section-title">Experience</h3>
+                                    <div className="cv-item">
+                                        <div className="cv-item-title">Senior Graphic Designer</div>
+                                        <div className="cv-item-details">Creative Studio XYZ • 2020 - Present</div>
+                                        <div className="cv-item-description">
+                                            Lead designer for brand identity projects, art direction for digital campaigns, 
+                                            and visual strategy for international clients.
+                                        </div>
+                                    </div>
+                                    <div className="cv-item">
+                                        <div className="cv-item-title">Freelance Designer & Artist</div>
+                                        <div className="cv-item-details">Self-Employed • 2015 - 2020</div>
+                                        <div className="cv-item-description">
+                                            Developed brand identities, digital illustrations, and fine art pieces for 
+                                            diverse clients across industries including tech, fashion, and hospitality.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="cv-section">
+                                    <h3 className="cv-section-title">Education</h3>
+                                    <div className="cv-item">
+                                        <div className="cv-item-title">BFA in Graphic Design</div>
+                                        <div className="cv-item-details">Rhode Island School of Design • 2015</div>
+                                        <div className="cv-item-description">
+                                            Concentration in typography and brand identity design. Graduated with honors.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="cv-section">
+                                    <h3 className="cv-section-title">Awards & Recognition</h3>
+                                    <div className="cv-item">
+                                        <div className="cv-item-title">Design Excellence Award</div>
+                                        <div className="cv-item-details">AIGA • 2023</div>
+                                    </div>
+                                    <div className="cv-item">
+                                        <div className="cv-item-title">Best in Show</div>
+                                        <div className="cv-item-details">Local Art Exhibition • 2022</div>
+                                    </div>
+                                </div>
+
+                                <button className="download-btn">
+                                    Download Full Resume PDF
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="contact" className="section">
+                        <div className="container">
+                            <h2 className="section-title">Get In Touch</h2>
+                            <p className="section-subtitle">Let's collaborate</p>
+                            
+                            <div className="contact-content">
+                                <p className="contact-text">
+                                    I'm always interested in new projects and collaborations. 
+                                    Whether you're looking for branding, digital art, or custom artwork, 
+                                    I'd love to hear from you.
+                                </p>
+
+                                <div className="contact-links">
+                                    <a href="https://facebook.com" target="_blank" className="contact-link">
+                                        <div className="contact-icon">f</div>
+                                        <div className="contact-label">Facebook</div>
+                                    </a>
+                                    <a href="https://linkedin.com" target="_blank" className="contact-link">
+                                        <div className="contact-icon">in</div>
+                                        <div className="contact-label">LinkedIn</div>
+                                    </a>
+                                    <a href="mailto:hello@hanstudio.com" className="contact-link">
+                                        <div className="contact-icon">@</div>
+                                        <div className="contact-label">Email</div>
+                                    </a>
+                                    <a href="tel:+1234567890" className="contact-link">
+                                        <div className="contact-icon">☎</div>
+                                        <div className="contact-label">Phone</div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <footer className="footer">
+                        <p className="footer-text">© 2026 HANSTUDIO. All rights reserved.</p>
+                    </footer>
+                </>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
